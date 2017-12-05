@@ -34,16 +34,18 @@ fn main() {
         &TextureSettings::new()
     ).unwrap();
 
-    while let Some(e) = events.next(&mut window) {
-        if let Some(r) = e.render_args() {
-            graphics.draw(r.viewport(), |context, gl| {
+    while let Some(event) = events.next(&mut window) {
+        if let Some(render_args) = event.render_args() {
+            graphics.draw(render_args.viewport(), |context, gl| {
                 clear([0.0, 0.0, 0.0, 1.0], gl);
                 image.draw(&texture, &draw_state, context.transform.trans(x, 0.0), gl);
             });
         }
 
-        if let Some(u) = e.update_args() {
-            x = x + 1.0;
+        if let Some(update_args) = event.update_args() {
+            let UpdateArgs {dt, ..} = update_args;
+
+            x = x + 1.0 * dt;
         }
     }
 }
