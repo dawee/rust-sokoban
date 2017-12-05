@@ -6,15 +6,14 @@ extern crate opengl_graphics;
 
 use piston::window::WindowSettings;
 use piston::event_loop::{Events, EventSettings};
-use piston::input::*;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{ GlGraphics, OpenGL, Texture};
-use graphics::{Image, clear};
+use graphics::{Image, Transformed, clear};
 use graphics::rectangle::square;
 use graphics::draw_state::DrawState;
-use graphics::Transformed;
 use texture::{TextureSettings};
 use std::path::Path;
+use piston::input::*;
 
 fn main() {
     let opengl = OpenGL::V3_2;
