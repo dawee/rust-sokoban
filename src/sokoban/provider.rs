@@ -6,24 +6,24 @@ use texture::TextureSettings;
 use std::path::Path;
 
 pub struct Provider {
-  pub graphics: GlGraphics,
-  texture_settings: TextureSettings
+    pub graphics: GlGraphics,
+    texture_settings: TextureSettings
 }
 
 impl Provider {
 
-  pub fn new() -> Provider {
-    Provider {
-      graphics: GlGraphics::new(OpenGL::V3_2),
-      texture_settings: TextureSettings::new()
+    pub fn new() -> Provider {
+        Provider {
+            graphics: GlGraphics::new(OpenGL::V3_2),
+            texture_settings: TextureSettings::new()
+        }
     }
-  }
 
-  pub fn load_texture(&self, name: &str) -> Texture {
-    let path_name = format!("assets/{}.png", name);
-    let path = Path::new(&path_name);
+    pub fn load_texture(&self, name: &str) -> Texture {
+        let path_name = format!("assets/{}.png", name);
+        let path = Path::new(&path_name);
 
-    Texture::from_path(path, &self.texture_settings).unwrap()
-  }
+        Texture::from_path(path, &self.texture_settings).unwrap()
+    }
 
 }
