@@ -1,6 +1,7 @@
 extern crate piston;
 extern crate graphics;
 extern crate texture;
+extern crate viewport;
 extern crate glutin_window;
 extern crate opengl_graphics;
 
@@ -11,6 +12,7 @@ use opengl_graphics::{GlGraphics, OpenGL, Texture};
 use graphics::{Image, Transformed, clear};
 use graphics::rectangle::square;
 use graphics::draw_state::DrawState;
+use viewport::Viewport;
 use texture::TextureSettings;
 use std::path::Path;
 use piston::input::*;
@@ -42,7 +44,7 @@ impl Provider {
     }
   }
 
-  fn load_texture(&mut self, name: &str) -> Texture {
+  fn load_texture(&self, name: &str) -> Texture {
     let path_name = format!("assets/{}.png", name);
     let path = Path::new(&path_name);
 
@@ -53,7 +55,7 @@ impl Provider {
 
 impl Character {
 
-  fn load(provider: &mut Provider) -> Character {
+  fn load(provider: &Provider) -> Character {
     Character {
       x: 0.0,
       y: 0.0,
@@ -67,8 +69,8 @@ impl Character {
     self.x += 5.0 * dt;
   }
 
-  fn render(&self, args: &RenderArgs, provider: &mut Provider) {
-    provider.graphics.draw(args.viewport(), |context, gl| {
+  fn render(&self, viewport: &Viewport, provider: &mut Provider) {
+    provider.graphics.draw(*viewport, |context, gl| {
       self.image.draw(
         &self.texture,
         &self.draw_state,
@@ -76,7 +78,6 @@ impl Character {
         gl
       );
     });
-
   }
 
 }
@@ -84,27 +85,25 @@ impl Character {
 impl Game {
 
   fn load() -> Game {
-    let mut provider = Provider::new();
-    let character = Character::load(&mut provider);
+    let provider = Provider::new();
+    let character = Character::load(&provider);
 
     Game {provider, character}
   }
 
-  fn update(&mut self, args: &UpdateArgs) {
-    let UpdateArgs {dt, ..} = *args;
-
+  fn update(&mut self, dt: f64) {
     self.character.update(dt);
   }
 
-  fn clear(&mut self, args: &RenderArgs) {
-    self.provider.graphics.draw(args.viewport(), |_, gl| {
+  fn clear(&mut self, viewport: &Viewport) {
+    self.provider.graphics.draw(*viewport, |_, gl| {
       clear([0.0, 0.0, 0.0, 1.0], gl);
     });
   }
 
-  fn render(&mut self, args: &RenderArgs) {
-    self.clear(args);
-    self.character.render(args, &mut self.provider);
+  fn render(&mut self, viewport: &Viewport) {
+    self.clear(viewport);
+    self.character.render(viewport, &mut self.provider);
   }
 
 }
@@ -123,11 +122,13 @@ fn main() {
 
   while let Some(event) = events.next(&mut window) {
     if let Some(render_args) = event.render_args() {
-      game.render(&render_args);
+      let viewport: Viewport = render_args.viewport();
+
+      game.render(&viewport);
     }
 
-    if let Some(update_args) = event.update_args() {
-      game.update(&update_args);
+    if let Some(UpdateArgs {dt, ..}) = event.update_args() {
+      game.update(dt);
     }
   }
 }
