@@ -16,13 +16,14 @@ use viewport::Viewport;
 use sokoban::Game;
 
 fn main() {
-  let mut game = Game::load();
   let mut events = Events::new(EventSettings::new());
   let mut window: Window = WindowSettings::new("Rust Sokoban", [200, 200])
     .opengl(OpenGL::V3_2)
     .exit_on_esc(true)
     .build()
     .unwrap();
+
+  let mut game = Game::load();
 
   while let Some(event) = events.next(&mut window) {
     if let Some(render_args) = event.render_args() {
