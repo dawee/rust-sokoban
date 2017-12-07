@@ -6,9 +6,8 @@ use opengl_graphics::{Texture};
 use graphics::{Image, Transformed};
 use graphics::draw_state::DrawState;
 use graphics::rectangle::square;
-use provider::Provider;
-
-use Viewport;
+use viewport::Viewport;
+use sokoban::Provider;
 
 pub struct Character {
   x: f64,

@@ -1,65 +1,28 @@
 extern crate piston;
-extern crate graphics;
-extern crate texture;
-extern crate viewport;
 extern crate glutin_window;
 extern crate opengl_graphics;
+extern crate graphics;
+extern crate viewport;
+extern crate texture;
 
-mod character;
-mod provider;
+mod sokoban;
 
 use piston::window::WindowSettings;
 use piston::event_loop::{Events, EventSettings};
+use piston::input::*;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::OpenGL;
-use graphics::clear;
 use viewport::Viewport;
-use piston::input::*;
-use character::Character;
-use provider::Provider;
-
-struct Game {
-  provider: Provider,
-  character: Character
-}
-
-impl Game {
-
-  fn load() -> Game {
-    let provider = Provider::new();
-    let character = Character::load(&provider);
-
-    Game {provider, character}
-  }
-
-  fn update(&mut self, dt: f64) {
-    self.character.update(dt);
-  }
-
-  fn clear(&mut self, viewport: &Viewport) {
-    self.provider.graphics.draw(*viewport, |_, gl| {
-      clear([0.0, 0.0, 0.0, 1.0], gl);
-    });
-  }
-
-  fn render(&mut self, viewport: &Viewport) {
-    self.clear(viewport);
-    self.character.render(viewport, &mut self.provider);
-  }
-
-}
-
+use sokoban::Game;
 
 fn main() {
-  let opengl = OpenGL::V3_2;
+  let mut game = Game::load();
   let mut events = Events::new(EventSettings::new());
   let mut window: Window = WindowSettings::new("Rust Sokoban", [200, 200])
-    .opengl(opengl)
+    .opengl(OpenGL::V3_2)
     .exit_on_esc(true)
     .build()
     .unwrap();
-
-  let mut game = Game::load();
 
   while let Some(event) = events.next(&mut window) {
     if let Some(render_args) = event.render_args() {
