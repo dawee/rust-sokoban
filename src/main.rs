@@ -9,16 +9,16 @@ mod sokoban;
 
 use piston::window::WindowSettings;
 use piston::event_loop::{Events, EventSettings};
-use piston::input::*;
+use piston::input::{PressEvent, ReleaseEvent, RenderEvent, UpdateArgs, UpdateEvent};
 use graphics::context::Context;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{GlGraphics, OpenGL};
 use viewport::Viewport;
-use sokoban::{Game, GameObject, Provider};
+use sokoban::{EventListener, Game, GameObject, Provider};
 
 fn main() {
     let mut events = Events::new(EventSettings::new());
-    let mut window: Window = WindowSettings::new("Rust Sokoban", [200, 200])
+    let mut window: Window = WindowSettings::new("Rust Sokoban", [500, 500])
         .opengl(OpenGL::V3_2)
         .exit_on_esc(true)
         .build()
@@ -39,6 +39,14 @@ fn main() {
 
         if let Some(UpdateArgs {dt, ..}) = event.update_args() {
             game.update(dt);
+        }
+
+        if let Some(button) = event.press_args() {
+            game.on_press_button(button);
+        }
+
+        if let Some(button) = event.release_args() {
+            game.on_release_button(button);
         }
     }
 }
