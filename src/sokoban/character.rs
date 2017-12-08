@@ -33,11 +33,9 @@ impl Character {
     }
 
     pub fn render(&mut self, context: &Context, gl: &mut GlGraphics) {
-      self.image.draw(
-          &self.texture,
-          &self.draw_state,
-          multiply(context.transform, self.transform),
-          gl
-      );
+      let transform: Matrix2d = multiply(context.transform, self.transform);
+
+      self.image.draw(&self.texture, &self.draw_state, transform, gl);
     }
+
 }
