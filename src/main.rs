@@ -14,7 +14,7 @@ use graphics::context::Context;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{GlGraphics, OpenGL};
 use viewport::Viewport;
-use sokoban::{Game, GameObject};
+use sokoban::{Game, GameObject, Provider};
 
 fn main() {
     let mut events = Events::new(EventSettings::new());
@@ -24,8 +24,9 @@ fn main() {
         .build()
         .unwrap();
 
+    let provider = Provider::new();
     let mut graphics = GlGraphics::new(OpenGL::V3_2);
-    let mut game = Game::load();
+    let mut game = Game::load(&provider);
 
     while let Some(event) = events.next(&mut window) {
         if let Some(render_args) = event.render_args() {

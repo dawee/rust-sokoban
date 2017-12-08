@@ -7,7 +7,7 @@ use sokoban::{Character, Provider};
 use opengl_graphics::GlGraphics;
 
 pub trait GameObject {
-  fn load() -> Self;
+  fn load(provider: &Provider) -> Self;
   fn update(&mut self, f64) {}
   fn render(&mut self, &Context, &mut GlGraphics) {}
 }
@@ -18,9 +18,8 @@ pub struct Game {
 
 impl GameObject for Game {
 
-    fn load() -> Game {
-        let provider = Provider::new();
-        let character = Character::load(&provider);
+    fn load(provider: &Provider) -> Game {
+        let character = Character::load(provider);
 
         Game {character}
     }
