@@ -14,7 +14,7 @@ use graphics::context::Context;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{GlGraphics, OpenGL};
 use viewport::Viewport;
-use sokoban::Game;
+use sokoban::{Game, GameObject};
 
 fn main() {
     let mut events = Events::new(EventSettings::new());
