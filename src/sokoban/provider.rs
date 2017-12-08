@@ -1,22 +1,18 @@
 extern crate texture;
 extern crate opengl_graphics;
 
-use opengl_graphics::{GlGraphics, OpenGL, Texture};
+use opengl_graphics::Texture;
 use texture::TextureSettings;
 use std::path::Path;
 
 pub struct Provider {
-    pub graphics: GlGraphics,
     texture_settings: TextureSettings
 }
 
 impl Provider {
 
     pub fn new() -> Provider {
-        Provider {
-            graphics: GlGraphics::new(OpenGL::V3_2),
-            texture_settings: TextureSettings::new()
-        }
+        Provider {texture_settings: TextureSettings::new()}
     }
 
     pub fn load_texture(&self, name: &str) -> Texture {

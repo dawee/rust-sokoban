@@ -2,11 +2,11 @@ extern crate graphics;
 extern crate viewport;
 extern crate opengl_graphics;
 
-use opengl_graphics::{Texture};
+use opengl_graphics::{Texture, GlGraphics};
 use graphics::{Image, Transformed};
 use graphics::draw_state::DrawState;
 use graphics::rectangle::square;
-use viewport::Viewport;
+use graphics::context::Context;
 use sokoban::Provider;
 
 pub struct Character {
@@ -33,15 +33,12 @@ impl Character {
         self.x += 5.0 * dt;
     }
 
-    pub fn render(&self, viewport: &Viewport, provider: &mut Provider) {
-        provider.graphics.draw(*viewport, |context, gl| {
-            self.image.draw(
-                &self.texture,
-                &self.draw_state,
-                context.transform.trans(self.x, self.y),
-                gl
-            );
-        });
+    pub fn render(&mut self, context: &Context, gl: &mut GlGraphics) {
+      self.image.draw(
+          &self.texture,
+          &self.draw_state,
+          context.transform.trans(self.x, self.y),
+          gl
+      );
     }
-
 }

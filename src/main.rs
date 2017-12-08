@@ -10,8 +10,9 @@ mod sokoban;
 use piston::window::WindowSettings;
 use piston::event_loop::{Events, EventSettings};
 use piston::input::*;
+use graphics::context::Context;
 use glutin_window::GlutinWindow as Window;
-use opengl_graphics::OpenGL;
+use opengl_graphics::{GlGraphics, OpenGL};
 use viewport::Viewport;
 use sokoban::Game;
 
@@ -23,13 +24,16 @@ fn main() {
         .build()
         .unwrap();
 
+    let mut graphics = GlGraphics::new(OpenGL::V3_2);
     let mut game = Game::load();
 
     while let Some(event) = events.next(&mut window) {
         if let Some(render_args) = event.render_args() {
             let viewport: Viewport = render_args.viewport();
 
-            game.render(&viewport);
+            graphics.draw(viewport, |context: Context, gl: &mut GlGraphics| {
+              game.render(&context, gl);
+            })
         }
 
         if let Some(UpdateArgs {dt, ..}) = event.update_args() {
