@@ -18,7 +18,7 @@ use sokoban::{EventListener, Game, GameObject, Provider};
 
 fn main() {
     let mut events = Events::new(EventSettings::new());
-    let mut window: Window = WindowSettings::new("Rust Sokoban", [500, 500])
+    let mut window: Window = WindowSettings::new("Rust Sokoban", [800, 600])
         .opengl(OpenGL::V3_2)
         .exit_on_esc(true)
         .build()

@@ -5,7 +5,7 @@ use graphics::clear;
 use piston::input::Button;
 use piston::input::keyboard::Key;
 use graphics::context::Context;
-use sokoban::{Character, Provider};
+use sokoban::{Character, Movable, Provider};
 use opengl_graphics::GlGraphics;
 
 pub trait GameObject {
@@ -60,14 +60,20 @@ impl EventListener for Game {
 
     fn on_press_key(&mut self, key: Key) {
         match key {
+            Key::Up => self.character.move_up(),
             Key::Right => self.character.move_right(),
+            Key::Down => self.character.move_down(),
+            Key::Left => self.character.move_left(),
             _ => println!("press key")
         };
     }
 
     fn on_release_key(&mut self, key: Key) {
         match key {
+            Key::Up => self.character.stop(),
             Key::Right => self.character.stop(),
+            Key::Down => self.character.stop(),
+            Key::Left => self.character.stop(),
             _ => println!("release key")
         };
     }

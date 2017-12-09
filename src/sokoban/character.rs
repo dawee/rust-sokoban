@@ -18,6 +18,14 @@ enum Direction {
     Left
 }
 
+pub trait Movable {
+    fn move_up(&mut self);
+    fn move_right(&mut self);
+    fn move_down(&mut self);
+    fn move_left(&mut self);
+    fn stop(&mut self);
+}
+
 pub struct Character {
     direction: Direction,
     image: Image,
@@ -40,8 +48,11 @@ impl GameObject for Character {
 
     fn update(&mut self, dt: f64) {
         self.transform = match self.direction {
-            Direction::Right => self.transform.trans(20.0 * dt, 0.0),
-            _ => self.transform
+            Direction::Up => self.transform.trans(0.0, -100.0 * dt),
+            Direction::Right => self.transform.trans(100.0 * dt, 0.0),
+            Direction::Down => self.transform.trans(0.0, 100.0 * dt),
+            Direction::Left => self.transform.trans(-100.0 * dt, 0.0),
+            Direction::Nope => self.transform
         };
     }
 
@@ -53,13 +64,25 @@ impl GameObject for Character {
 
 }
 
-impl Character {
+impl Movable for Character {
 
-    pub fn move_right(&mut self) {
+    fn move_up(&mut self) {
+        self.direction = Direction::Up;
+    }
+
+    fn move_right(&mut self) {
         self.direction = Direction::Right;
     }
 
-    pub fn stop(&mut self) {
+    fn move_down(&mut self) {
+        self.direction = Direction::Down;
+    }
+
+    fn move_left(&mut self) {
+        self.direction = Direction::Left;
+    }
+
+    fn stop(&mut self) {
         self.direction = Direction::Nope;
     }
 
