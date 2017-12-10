@@ -34,7 +34,7 @@ fn main() {
 
             graphics.draw(viewport, |context: Context, gl: &mut GlGraphics| {
               game.render(&context, gl);
-            })
+            });
         }
 
         if let Some(UpdateArgs {dt, ..}) = event.update_args() {

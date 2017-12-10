@@ -2,13 +2,11 @@ extern crate graphics;
 extern crate viewport;
 extern crate opengl_graphics;
 
-use opengl_graphics::{Texture, GlGraphics};
-use graphics::{Image, Transformed};
-use graphics::draw_state::DrawState;
-use graphics::rectangle::square;
+use opengl_graphics::GlGraphics;
+use graphics::Transformed;
 use graphics::context::Context;
 use graphics::math::{Matrix2d, identity, multiply};
-use sokoban::{GameObject, Provider};
+use sokoban::{Drawable, GameObject, Provider};
 
 pub trait Movable {
     fn move_up(&mut self);
@@ -18,9 +16,7 @@ pub trait Movable {
 }
 
 pub struct Character {
-    image: Image,
-    texture: Texture,
-    draw_state: DrawState,
+    drawable: Drawable,
     transform: Matrix2d
 }
 
@@ -28,9 +24,7 @@ impl GameObject for Character {
 
     fn load(provider: &Provider) -> Character {
         Character {
-            draw_state: DrawState::new_alpha(),
-            image: Image::new().rect(square(0.0, 0.0, 50.0)),
-            texture: provider.load_texture("Character1"),
+            drawable: Drawable::new(provider, 50.0, "Character1"),
             transform: identity()
         }
     }
@@ -38,7 +32,7 @@ impl GameObject for Character {
     fn render(&mut self, context: &Context, gl: &mut GlGraphics) {
       let transform: Matrix2d = multiply(context.transform, self.transform);
 
-      self.image.draw(&self.texture, &self.draw_state, transform, gl);
+      self.drawable.draw(gl, transform);
     }
 
 }
