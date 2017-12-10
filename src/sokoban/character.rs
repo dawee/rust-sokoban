@@ -6,14 +6,7 @@ use opengl_graphics::GlGraphics;
 use graphics::Transformed;
 use graphics::context::Context;
 use graphics::math::{Matrix2d, identity, multiply};
-use sokoban::{Drawable, GameObject, Provider};
-
-pub trait Movable {
-    fn move_up(&mut self);
-    fn move_right(&mut self);
-    fn move_down(&mut self);
-    fn move_left(&mut self);
-}
+use sokoban::{Drawable, GameObject, Movable, Provider};
 
 pub struct Character {
     drawable: Drawable,
