@@ -5,7 +5,7 @@ use graphics::clear;
 use piston::input::Button;
 use piston::input::keyboard::Key;
 use graphics::context::Context;
-use sokoban::{Character, Movable, Provider, Wall};
+use sokoban::{Character, Ground, Movable, Provider, Wall};
 use opengl_graphics::GlGraphics;
 
 pub trait GameObject {
@@ -35,6 +35,7 @@ pub trait EventListener {
 
 pub struct Game {
     character: Character,
+    ground: Ground,
     wall: Wall
 }
 
@@ -42,11 +43,12 @@ impl GameObject for Game {
 
     fn load(provider: &Provider) -> Game {
         let character = Character::load(provider);
+        let ground = Ground::load(provider);
         let mut wall = Wall::load(provider);
 
         wall.set_position(50.0, 0.0);
 
-        Game {character, wall}
+        Game {character, ground, wall}
     }
 
     fn update(&mut self, dt: f64) {
@@ -55,8 +57,9 @@ impl GameObject for Game {
 
     fn render(&mut self, context: &Context, gl: &mut GlGraphics) {
       clear([0.0, 0.0, 0.0, 1.0], gl);
-      self.character.render(context, gl);
+      self.ground.render(context, gl);
       self.wall.render(context, gl);
+      self.character.render(context, gl);
     }
 
 }
