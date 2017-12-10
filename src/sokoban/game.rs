@@ -29,8 +29,8 @@ pub trait EventListener {
         };
     }
 
-    fn on_press_key(&mut self, Key);
-    fn on_release_key(&mut self, Key);
+    fn on_press_key(&mut self, Key) {}
+    fn on_release_key(&mut self, Key) {}
 }
 
 pub struct Game {
@@ -65,16 +65,6 @@ impl EventListener for Game {
             Key::Down => self.character.move_down(),
             Key::Left => self.character.move_left(),
             _ => println!("press key")
-        };
-    }
-
-    fn on_release_key(&mut self, key: Key) {
-        match key {
-            Key::Up => self.character.stop(),
-            Key::Right => self.character.stop(),
-            Key::Down => self.character.stop(),
-            Key::Left => self.character.stop(),
-            _ => println!("release key")
         };
     }
 
