@@ -19,6 +19,7 @@ pub struct Sprite {
 }
 
 impl Sprite {
+
     pub fn new(transform: Matrix2d, texture_name: &str) -> Sprite {
         Sprite {
             transform,
@@ -28,16 +29,16 @@ impl Sprite {
         }
     }
 
-    pub fn translate_x(&mut self, x: f64) {
-        self.transform = self.transform.trans(x, 0.0);
+    pub fn transform<F>(&mut self, transform: F) where F: FnOnce(&Matrix2d) -> Option<Matrix2d> {
+        if let Some(transformed) = transform(&self.transform) {
+            self.transform = transformed;
+        }
     }
 
-    pub fn translate_y(&mut self, y: f64) {
-        self.transform = self.transform.trans(0.0, y);
-    }
 }
 
 impl GameObject for Sprite {
+
     fn load(&self, provider: &mut Provider) {
         provider.load_texture(&self.texture_name);
     }
@@ -49,4 +50,5 @@ impl GameObject for Sprite {
             self.image.draw(texture, &self.draw_state, transform, gl);
         });
     }
+
 }

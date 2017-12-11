@@ -5,7 +5,7 @@ extern crate opengl_graphics;
 use opengl_graphics::GlGraphics;
 use graphics::Transformed;
 use graphics::context::Context;
-use graphics::math::identity;
+use graphics::math::{identity, transform_pos};
 use hydro::{GameObject, Provider, Sprite};
 
 pub struct Character {
@@ -22,19 +22,26 @@ impl Character {
     }
 
     pub fn move_up(&mut self) {
-        self.sprite.translate_y(-50.0);
+        self.sprite.transform(|transform| {
+            let moved = transform.trans(0.0, -50.0);
+            let pos = transform_pos(moved.clone(), [0.0, 0.0]);
+
+            return if pos[1] >= 0.0 {
+                Some(transform.trans(0.0, -50.0))
+            } else {None}
+        });
     }
 
     pub fn move_right(&mut self) {
-        self.sprite.translate_x(50.0);
+        self.sprite.transform(|transform| Some(transform.trans(50.0, 0.0)));
     }
 
     pub fn move_down(&mut self) {
-        self.sprite.translate_y(50.0);
+        self.sprite.transform(|transform| Some(transform.trans(0.0, 50.0)));
     }
 
     pub fn move_left(&mut self) {
-        self.sprite.translate_x(-50.0);
+        self.sprite.transform(|transform| Some(transform.trans(-50.0, 0.0)));
     }
 
 }
