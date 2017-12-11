@@ -10,12 +10,12 @@ mod sokoban;
 
 use piston::window::WindowSettings;
 use piston::event_loop::{Events, EventSettings};
-use piston::input::{PressEvent, ReleaseEvent, RenderEvent, UpdateArgs, UpdateEvent};
+use piston::input::{PressEvent, RenderEvent, UpdateArgs, UpdateEvent};
 use graphics::context::Context;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{GlGraphics, OpenGL};
 use viewport::Viewport;
-use hydro::{EventListener, GameObject, Provider};
+use hydro::{GameObject, Provider};
 use sokoban::Game;
 
 fn main() {
@@ -47,10 +47,6 @@ fn main() {
 
         if let Some(button) = event.press_args() {
             game.on_press_button(button);
-        }
-
-        if let Some(button) = event.release_args() {
-            game.on_release_button(button);
         }
     }
 }
