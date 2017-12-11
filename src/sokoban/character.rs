@@ -6,7 +6,7 @@ use opengl_graphics::GlGraphics;
 use graphics::Transformed;
 use graphics::context::Context;
 use graphics::math::identity;
-use sokoban::{GameObject, Provider, Sprite};
+use hydro::{GameObject, Provider, Sprite};
 
 pub struct Character {
     sprite: Sprite

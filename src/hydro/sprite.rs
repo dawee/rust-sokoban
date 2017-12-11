@@ -9,7 +9,7 @@ use graphics::rectangle::square;
 use graphics::context::Context;
 use graphics::math::Matrix2d;
 use graphics::Transformed;
-use sokoban::{Provider, GameObject};
+use hydro::{Provider, GameObject};
 
 pub struct Sprite {
     texture_name: String,

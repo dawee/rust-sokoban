@@ -5,6 +5,7 @@ extern crate graphics;
 extern crate viewport;
 extern crate texture;
 
+mod hydro;
 mod sokoban;
 
 use piston::window::WindowSettings;
@@ -14,7 +15,8 @@ use graphics::context::Context;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{GlGraphics, OpenGL};
 use viewport::Viewport;
-use sokoban::{EventListener, Game, GameObject, Provider};
+use hydro::{EventListener, GameObject, Provider};
+use sokoban::Game;
 
 fn main() {
     let mut events = Events::new(EventSettings::new());
