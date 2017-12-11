@@ -38,11 +38,11 @@ impl Sprite {
 }
 
 impl GameObject for Sprite {
-    fn load(&mut self, provider: &mut Provider) {
+    fn load(&self, provider: &mut Provider) {
         provider.load_texture(&self.texture_name);
     }
 
-    fn render(&mut self, provider: &mut Provider, context: &Context, gl: &mut GlGraphics) {
+    fn render(&self, provider: &Provider, context: &Context, gl: &mut GlGraphics) {
         provider.use_texture(&self.texture_name, |texture: &Texture| {
             let transform = context.transform.append_transform(self.transform);
 

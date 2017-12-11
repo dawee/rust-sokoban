@@ -16,7 +16,7 @@ impl Ground {
 
     pub fn new(position: (f64, f64)) -> Ground {
         let (x, y) = position;
-        let sprite = Sprite::new(identity().trans(x, y), "Ground_Concrete");
+        let sprite = Sprite::new(identity().trans(x, y), "GroundGravel_Concrete");
 
         Ground {sprite}
     }
@@ -25,11 +25,11 @@ impl Ground {
 
 impl GameObject for Ground {
 
-    fn load(&mut self, provider: &mut Provider) {
+    fn load(&self, provider: &mut Provider) {
         self.sprite.load(provider);
     }
 
-    fn render(&mut self, provider: &mut Provider, context: &Context, gl: &mut GlGraphics) {
+    fn render(&self, provider: &Provider, context: &Context, gl: &mut GlGraphics) {
         self.sprite.render(provider, context, gl);
     }
 

@@ -12,7 +12,7 @@ use graphics::context::Context;
 use opengl_graphics::GlGraphics;
 
 pub trait GameObject {
-    fn load(&mut self, &mut Provider) {}
+    fn load(&self, &mut Provider) {}
     fn update(&mut self, f64) {}
-    fn render(&mut self, &mut Provider, &Context, &mut GlGraphics) {}
+    fn render(&self, &Provider, &Context, &mut GlGraphics) {}
 }

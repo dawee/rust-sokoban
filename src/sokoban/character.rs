@@ -41,11 +41,11 @@ impl Character {
 
 impl GameObject for Character {
 
-    fn load(&mut self, provider: &mut Provider) {
+    fn load(&self, provider: &mut Provider) {
         self.sprite.load(provider);
     }
 
-    fn render(&mut self, provider: &mut Provider, context: &Context, gl: &mut GlGraphics) {
+    fn render(&self, provider: &Provider, context: &Context, gl: &mut GlGraphics) {
         self.sprite.render(provider, context, gl);
     }
 

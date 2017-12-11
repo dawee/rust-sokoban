@@ -11,16 +11,23 @@ use sokoban::{Character, Ground};
 
 pub struct Game {
     character: Character,
-    ground: Ground
+    grounds: Vec<Ground>
 }
 
 impl Game {
 
     pub fn new() -> Game {
         let character = Character::new((0.0, 0.0));
-        let ground = Ground::new((0.0, 0.0));
+        let (rows, cols) = (12, 16);
+        let grounds = (0..(rows * cols)).map(|n| {
+            let row = (n as f64 / cols as f64).floor();
+            let col = n as f64 - row * cols as f64;
+            let position = (col * 50.0, row * 50.0);
 
-        Game {character, ground}
+            Ground::new(position)
+        }).collect();
+
+        Game {character, grounds}
     }
 
     pub fn on_press_button(&mut self, button: Button) {
@@ -44,14 +51,14 @@ impl Game {
 
 impl GameObject for Game {
 
-    fn load(&mut self, provider: &mut Provider) {
-        self.ground.load(provider);
+    fn load(&self, provider: &mut Provider) {
+        self.grounds.iter().for_each(|ground| ground.load(provider));
         self.character.load(provider);
     }
 
-    fn render(&mut self, provider: &mut Provider, context: &Context, gl: &mut GlGraphics) {
+    fn render(&self, provider: &Provider, context: &Context, gl: &mut GlGraphics) {
       clear([0.0, 0.0, 0.0, 1.0], gl);
-      self.ground.render(provider, context, gl);
+      self.grounds.iter().for_each(|ground| ground.render(provider, context, gl));
       self.character.render(provider, context, gl);
     }
 

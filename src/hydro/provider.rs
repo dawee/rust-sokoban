@@ -31,7 +31,7 @@ impl Provider {
         }
     }
 
-    pub fn use_texture<F>(&mut self, name: &String, use_texture: F) where F: FnOnce(&Texture) {
+    pub fn use_texture<F>(&self, name: &String, use_texture: F) where F: FnOnce(&Texture) {
         if let Some(texture) = self.textures.get(name) {
             use_texture(texture);
         } else {
