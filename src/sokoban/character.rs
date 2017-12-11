@@ -5,7 +5,7 @@ extern crate opengl_graphics;
 use opengl_graphics::GlGraphics;
 use graphics::Transformed;
 use graphics::context::Context;
-use graphics::math::{Matrix2d, identity, multiply};
+use graphics::math::identity;
 use sokoban::{GameObject, Movable, Provider, Sprite};
 
 pub struct Character {
@@ -15,7 +15,7 @@ pub struct Character {
 impl Character {
     pub fn new(position: (f64, f64)) -> Character {
         let (x, y) = position;
-        let sprite = Sprite::new(identity().trans(x, y));
+        let sprite = Sprite::new(identity().trans(x, y), "Character1");
 
         Character {sprite}
     }
@@ -23,8 +23,12 @@ impl Character {
 
 impl GameObject for Character {
 
-    fn render(&mut self, context: &Context, gl: &mut GlGraphics) {
-        self.sprite.render(context, gl);
+    fn load(&mut self, provider: &mut Provider) {
+        self.sprite.load(provider);
+    }
+
+    fn render(&mut self, provider: &mut Provider, context: &Context, gl: &mut GlGraphics) {
+        self.sprite.render(provider, context, gl);
     }
 
 }
@@ -32,15 +36,19 @@ impl GameObject for Character {
 impl Movable for Character {
 
     fn move_up(&mut self) {
+        self.sprite.translate_y(-50.0);
     }
 
     fn move_right(&mut self) {
+        self.sprite.translate_x(50.0);
     }
 
     fn move_down(&mut self) {
+        self.sprite.translate_y(50.0);
     }
 
     fn move_left(&mut self) {
+        self.sprite.translate_x(-50.0);
     }
 
 }

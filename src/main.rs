@@ -24,18 +24,18 @@ fn main() {
         .build()
         .unwrap();
 
-    let provider = Provider::new();
+    let mut provider = Provider::new();
     let mut graphics = GlGraphics::new(OpenGL::V3_2);
     let mut game = Game::new();
 
-    game.load(&provider);
+    game.load(&mut provider);
 
     while let Some(event) = events.next(&mut window) {
         if let Some(render_args) = event.render_args() {
             let viewport: Viewport = render_args.viewport();
 
             graphics.draw(viewport, |context: Context, gl: &mut GlGraphics| {
-              game.render(&context, gl);
+              game.render(&mut provider, &context, gl);
             });
         }
 

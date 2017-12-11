@@ -9,9 +9,9 @@ use sokoban::{Character, Movable, Provider};
 use opengl_graphics::GlGraphics;
 
 pub trait GameObject {
-    fn load(&mut self, provider: &Provider) {}
+    fn load(&mut self, &mut Provider) {}
     fn update(&mut self, f64) {}
-    fn render(&mut self, &Context, &mut GlGraphics) {}
+    fn render(&mut self, &mut Provider, &Context, &mut GlGraphics) {}
 }
 
 pub trait EventListener {
@@ -49,8 +49,13 @@ impl Game {
 
 impl GameObject for Game {
 
-    fn render(&mut self, context: &Context, gl: &mut GlGraphics) {
+    fn load(&mut self, provider: &mut Provider) {
+        self.character.load(provider);
+    }
+
+    fn render(&mut self, provider: &mut Provider, context: &Context, gl: &mut GlGraphics) {
       clear([0.0, 0.0, 0.0, 1.0], gl);
+      self.character.render(provider, context, gl);
     }
 
 }
@@ -58,13 +63,13 @@ impl GameObject for Game {
 impl EventListener for Game {
 
     fn on_press_key(&mut self, key: Key) {
-        // match key {
-        //     Key::Up => self.character.move_up(),
-        //     Key::Right => self.character.move_right(),
-        //     Key::Down => self.character.move_down(),
-        //     Key::Left => self.character.move_left(),
-        //     _ => println!("press key")
-        // };
+        match key {
+            Key::Up => self.character.move_up(),
+            Key::Right => self.character.move_right(),
+            Key::Down => self.character.move_down(),
+            Key::Left => self.character.move_left(),
+            _ => println!("press key")
+        };
     }
 
 }
