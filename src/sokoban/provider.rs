@@ -15,11 +15,10 @@ impl Provider {
         Provider {texture_settings: TextureSettings::new()}
     }
 
-    pub fn load_texture(&self, name: &str) -> Texture {
+    pub fn load_texture(&self, name: &str) {
         let path_name = format!("assets/{}.png", name);
         let path = Path::new(&path_name);
-
-        Texture::from_path(path, &self.texture_settings).unwrap()
+        let texture = Texture::from_path(path, &self.texture_settings).unwrap();
     }
 
 }

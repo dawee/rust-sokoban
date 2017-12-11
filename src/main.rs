@@ -26,7 +26,9 @@ fn main() {
 
     let provider = Provider::new();
     let mut graphics = GlGraphics::new(OpenGL::V3_2);
-    let mut game = Game::load(&provider);
+    let mut game = Game::new();
+
+    game.load(&provider);
 
     while let Some(event) = events.next(&mut window) {
         if let Some(render_args) = event.render_args() {

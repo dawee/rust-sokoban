@@ -5,11 +5,11 @@ use graphics::clear;
 use piston::input::Button;
 use piston::input::keyboard::Key;
 use graphics::context::Context;
-use sokoban::{Character, Ground, Movable, Provider, Wall};
+use sokoban::{Character, Movable, Provider};
 use opengl_graphics::GlGraphics;
 
 pub trait GameObject {
-    fn load(provider: &Provider) -> Self;
+    fn load(&mut self, provider: &Provider) {}
     fn update(&mut self, f64) {}
     fn render(&mut self, &Context, &mut GlGraphics) {}
 }
@@ -34,32 +34,23 @@ pub trait EventListener {
 }
 
 pub struct Game {
-    character: Character,
-    ground: Ground,
-    wall: Wall
+    character: Character
+}
+
+impl Game {
+
+    pub fn new() -> Game {
+        let character = Character::new((0.0, 0.0));
+
+        Game {character}
+    }
+
 }
 
 impl GameObject for Game {
 
-    fn load(provider: &Provider) -> Game {
-        let character = Character::load(provider);
-        let ground = Ground::load(provider);
-        let mut wall = Wall::load(provider);
-
-        wall.set_position(50.0, 0.0);
-
-        Game {character, ground, wall}
-    }
-
-    fn update(&mut self, dt: f64) {
-        self.character.update(dt);
-    }
-
     fn render(&mut self, context: &Context, gl: &mut GlGraphics) {
       clear([0.0, 0.0, 0.0, 1.0], gl);
-      self.ground.render(context, gl);
-      self.wall.render(context, gl);
-      self.character.render(context, gl);
     }
 
 }
@@ -67,13 +58,13 @@ impl GameObject for Game {
 impl EventListener for Game {
 
     fn on_press_key(&mut self, key: Key) {
-        match key {
-            Key::Up => self.character.move_up(),
-            Key::Right => self.character.move_right(),
-            Key::Down => self.character.move_down(),
-            Key::Left => self.character.move_left(),
-            _ => println!("press key")
-        };
+        // match key {
+        //     Key::Up => self.character.move_up(),
+        //     Key::Right => self.character.move_right(),
+        //     Key::Down => self.character.move_down(),
+        //     Key::Left => self.character.move_left(),
+        //     _ => println!("press key")
+        // };
     }
 
 }
