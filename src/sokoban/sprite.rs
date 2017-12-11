@@ -7,7 +7,7 @@ use graphics::Image;
 use graphics::draw_state::DrawState;
 use graphics::rectangle::square;
 use graphics::context::Context;
-use graphics::math::{Matrix2d, multiply};
+use graphics::math::Matrix2d;
 use graphics::Transformed;
 use sokoban::{Provider, GameObject};
 
@@ -44,7 +44,7 @@ impl GameObject for Sprite {
 
     fn render(&mut self, provider: &mut Provider, context: &Context, gl: &mut GlGraphics) {
         provider.use_texture(&self.texture_name, |texture: &Texture| {
-            let transform: Matrix2d = multiply(context.transform, self.transform);
+            let transform = context.transform.append_transform(self.transform);
 
             self.image.draw(texture, &self.draw_state, transform, gl);
         });
