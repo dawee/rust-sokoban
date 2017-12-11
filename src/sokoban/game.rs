@@ -7,18 +7,20 @@ use piston::input::keyboard::Key;
 use graphics::context::Context;
 use opengl_graphics::GlGraphics;
 use hydro::{GameObject, Provider};
-use sokoban::Character;
+use sokoban::{Character, Ground};
 
 pub struct Game {
-    character: Character
+    character: Character,
+    ground: Ground
 }
 
 impl Game {
 
     pub fn new() -> Game {
         let character = Character::new((0.0, 0.0));
+        let ground = Ground::new((0.0, 0.0));
 
-        Game {character}
+        Game {character, ground}
     }
 
     pub fn on_press_button(&mut self, button: Button) {
@@ -43,11 +45,13 @@ impl Game {
 impl GameObject for Game {
 
     fn load(&mut self, provider: &mut Provider) {
+        self.ground.load(provider);
         self.character.load(provider);
     }
 
     fn render(&mut self, provider: &mut Provider, context: &Context, gl: &mut GlGraphics) {
       clear([0.0, 0.0, 0.0, 1.0], gl);
+      self.ground.render(provider, context, gl);
       self.character.render(provider, context, gl);
     }
 
