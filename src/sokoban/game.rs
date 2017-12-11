@@ -5,7 +5,7 @@ use graphics::clear;
 use piston::input::Button;
 use piston::input::keyboard::Key;
 use graphics::context::Context;
-use sokoban::{Character, Movable, Provider};
+use sokoban::{Character, Provider};
 use opengl_graphics::GlGraphics;
 
 pub trait GameObject {
