@@ -26,22 +26,35 @@ impl Character {
             let moved = transform.trans(0.0, -50.0);
             let pos = transform_pos(moved.clone(), [0.0, 0.0]);
 
-            return if pos[1] >= 0.0 {
-                Some(transform.trans(0.0, -50.0))
-            } else {None}
+            return if pos[1] >= 0.0 { Some(moved) } else { None };
         });
     }
 
     pub fn move_right(&mut self) {
-        self.sprite.transform(|transform| Some(transform.trans(50.0, 0.0)));
+        self.sprite.transform(|transform| {
+            let moved = transform.trans(50.0, 0.0);
+            let pos = transform_pos(moved.clone(), [0.0, 0.0]);
+
+            return if pos[0] < 800.0 { Some(moved) } else { None };
+        });
     }
 
     pub fn move_down(&mut self) {
-        self.sprite.transform(|transform| Some(transform.trans(0.0, 50.0)));
+        self.sprite.transform(|transform| {
+            let moved = transform.trans(0.0, 50.0);
+            let pos = transform_pos(moved.clone(), [0.0, 0.0]);
+
+            return if pos[1] < 600.0 { Some(moved) } else { None };
+        });
     }
 
     pub fn move_left(&mut self) {
-        self.sprite.transform(|transform| Some(transform.trans(-50.0, 0.0)));
+        self.sprite.transform(|transform| {
+            let moved = transform.trans(-50.0, 0.0);
+            let pos = transform_pos(moved.clone(), [0.0, 0.0]);
+
+            return if pos[0] >= 0.0 { Some(moved) } else { None };
+        });
     }
 
 }
