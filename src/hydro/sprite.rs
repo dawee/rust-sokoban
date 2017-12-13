@@ -6,7 +6,6 @@ use opengl_graphics::{Texture, GlGraphics};
 use graphics::Image;
 use graphics::draw_state::DrawState;
 use graphics::rectangle::square;
-use graphics::context::Context;
 use graphics::math::Matrix2d;
 use graphics::Transformed;
 use hydro::{Provider, GameObject};
@@ -29,12 +28,6 @@ impl Sprite {
         }
     }
 
-    pub fn transform<F>(&mut self, transform: F) where F: FnOnce(&Matrix2d) -> Option<Matrix2d> {
-        if let Some(transformed) = transform(&self.transform) {
-            self.transform = transformed;
-        }
-    }
-
 }
 
 impl GameObject for Sprite {
@@ -43,9 +36,9 @@ impl GameObject for Sprite {
         provider.load_texture(&self.texture_name);
     }
 
-    fn render(&self, provider: &Provider, context: &Context, gl: &mut GlGraphics) {
+    fn render(&self, provider: &Provider, parent_transform: &Matrix2d, gl: &mut GlGraphics) {
         provider.use_texture(&self.texture_name, |texture: &Texture| {
-            let transform = context.transform.append_transform(self.transform);
+            let transform = self.transform.prepend_transform(*parent_transform);
 
             self.image.draw(texture, &self.draw_state, transform, gl);
         });

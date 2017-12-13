@@ -4,7 +4,7 @@ extern crate viewport;
 use graphics::clear;
 use piston::input::Button;
 use piston::input::keyboard::Key;
-use graphics::context::Context;
+use graphics::math::Matrix2d;
 use opengl_graphics::GlGraphics;
 use hydro::{GameObject, Provider};
 use sokoban::{Character, Ground};
@@ -56,10 +56,10 @@ impl GameObject for Game {
         self.character.load(provider);
     }
 
-    fn render(&self, provider: &Provider, context: &Context, gl: &mut GlGraphics) {
+    fn render(&self, provider: &Provider, parent_transform: &Matrix2d, gl: &mut GlGraphics) {
       clear([0.0, 0.0, 0.0, 1.0], gl);
-      self.grounds.iter().for_each(|ground| ground.render(provider, context, gl));
-      self.character.render(provider, context, gl);
+      self.grounds.iter().for_each(|ground| ground.render(provider, parent_transform, gl));
+      self.character.render(provider, parent_transform, gl);
     }
 
 }

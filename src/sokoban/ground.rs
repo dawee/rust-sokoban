@@ -4,8 +4,7 @@ extern crate opengl_graphics;
 
 use opengl_graphics::GlGraphics;
 use graphics::Transformed;
-use graphics::context::Context;
-use graphics::math::identity;
+use graphics::math::{Matrix2d, identity};
 use hydro::{GameObject, Provider, Sprite};
 
 pub struct Ground {
@@ -29,8 +28,8 @@ impl GameObject for Ground {
         self.sprite.load(provider);
     }
 
-    fn render(&self, provider: &Provider, context: &Context, gl: &mut GlGraphics) {
-        self.sprite.render(provider, context, gl);
+    fn render(&self, provider: &Provider, parent_transform: &Matrix2d, gl: &mut GlGraphics) {
+        self.sprite.render(provider, parent_transform, gl);
     }
 
 }

@@ -37,7 +37,7 @@ fn main() {
             let viewport: Viewport = render_args.viewport();
 
             graphics.draw(viewport, |context: Context, gl: &mut GlGraphics| {
-              game.render(&mut provider, &context, gl);
+              game.render(&mut provider, &context.transform, gl);
             });
         }
 
