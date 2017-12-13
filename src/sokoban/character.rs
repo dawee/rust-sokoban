@@ -5,7 +5,6 @@ extern crate opengl_graphics;
 use opengl_graphics::GlGraphics;
 use graphics::Transformed;
 use graphics::math::{Matrix2d, identity, transform_pos};
-use std::collections::HashMap;
 use hydro::{GameObject, Provider, Sprite};
 
 enum Posture {Up, Right, Down, Left}

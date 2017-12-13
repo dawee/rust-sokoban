@@ -4,33 +4,39 @@ extern crate viewport;
 use graphics::clear;
 use piston::input::Button;
 use piston::input::keyboard::Key;
-use graphics::math::Matrix2d;
+use graphics::Transformed;
+use graphics::math::{Matrix2d, identity};
 use opengl_graphics::GlGraphics;
-use hydro::{GameObject, Provider};
-use sokoban::{Character, Ground, Wall};
+use hydro::{GameObject, Provider, Sprite};
+use sokoban::{Character};
 
 pub struct Game {
     character: Character,
-    grounds: Vec<Ground>,
-    wall: Wall
+    tiles: Vec<Sprite>
 }
 
 impl Game {
 
     pub fn new() -> Game {
-        let character = Character::new((0.0, 0.0));
+        let character = Character::new((50.0, 50.0));
         let (rows, cols) = (12, 16);
-        let grounds = (0..(rows * cols)).map(|n| {
+        let mut tiles: Vec<Sprite> = (0..(rows * cols)).map(|n| {
             let row = (n as f64 / cols as f64).floor();
             let col = n as f64 - row * cols as f64;
-            let position = (col * 50.0, row * 50.0);
 
-            Ground::new(position)
+            Sprite::new(identity().trans(col * 50.0, row * 50.0), "GroundGravel_Concrete")
         }).collect();
 
-        let wall = Wall::new((200.0, 100.0));
+        tiles.push(Sprite::new(identity().trans(0.0, 0.0), "Wall_Black"));
+        tiles.push(Sprite::new(identity().trans(50.0, 0.0), "Wall_Black"));
+        tiles.push(Sprite::new(identity().trans(100.0, 0.0), "Wall_Black"));
+        tiles.push(Sprite::new(identity().trans(150.0, 0.0), "Wall_Black"));
+        tiles.push(Sprite::new(identity().trans(0.0, 50.0), "Wall_Black"));
+        tiles.push(Sprite::new(identity().trans(0.0, 100.0), "Wall_Black"));
+        tiles.push(Sprite::new(identity().trans(50.0, 100.0), "Wall_Black"));
+        tiles.push(Sprite::new(identity().trans(100.0, 100.0), "Wall_Black"));
 
-        Game {character, grounds, wall}
+        Game {character, tiles}
     }
 
     pub fn on_press_button(&mut self, button: Button) {
@@ -55,15 +61,13 @@ impl Game {
 impl GameObject for Game {
 
     fn load(&self, provider: &mut Provider) {
-        self.grounds.iter().for_each(|ground| ground.load(provider));
         self.character.load(provider);
-        self.wall.load(provider);
+        self.tiles.iter().for_each(|ground| ground.load(provider));
     }
 
     fn render(&self, provider: &Provider, parent_transform: &Matrix2d, gl: &mut GlGraphics) {
       clear([0.0, 0.0, 0.0, 1.0], gl);
-      self.grounds.iter().for_each(|ground| ground.render(provider, parent_transform, gl));
-      self.wall.render(provider, parent_transform, gl);
+      self.tiles.iter().for_each(|ground| ground.render(provider, parent_transform, gl));
       self.character.render(provider, parent_transform, gl);
     }
 
