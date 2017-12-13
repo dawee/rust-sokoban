@@ -7,11 +7,12 @@ use piston::input::keyboard::Key;
 use graphics::math::Matrix2d;
 use opengl_graphics::GlGraphics;
 use hydro::{GameObject, Provider};
-use sokoban::{Character, Ground};
+use sokoban::{Character, Ground, Wall};
 
 pub struct Game {
     character: Character,
-    grounds: Vec<Ground>
+    grounds: Vec<Ground>,
+    wall: Wall
 }
 
 impl Game {
@@ -27,7 +28,9 @@ impl Game {
             Ground::new(position)
         }).collect();
 
-        Game {character, grounds}
+        let wall = Wall::new((200.0, 100.0));
+
+        Game {character, grounds, wall}
     }
 
     pub fn on_press_button(&mut self, button: Button) {
@@ -54,11 +57,13 @@ impl GameObject for Game {
     fn load(&self, provider: &mut Provider) {
         self.grounds.iter().for_each(|ground| ground.load(provider));
         self.character.load(provider);
+        self.wall.load(provider);
     }
 
     fn render(&self, provider: &Provider, parent_transform: &Matrix2d, gl: &mut GlGraphics) {
       clear([0.0, 0.0, 0.0, 1.0], gl);
       self.grounds.iter().for_each(|ground| ground.render(provider, parent_transform, gl));
+      self.wall.render(provider, parent_transform, gl);
       self.character.render(provider, parent_transform, gl);
     }
 
