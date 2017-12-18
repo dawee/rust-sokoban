@@ -1,3 +1,3 @@
-mod context;
+mod window;
 
-pub use self::context::Context;
+pub use self::window::Window;
