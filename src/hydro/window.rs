@@ -19,4 +19,11 @@ impl Window {
         Window {gl, gl_window}
     }
 
+    pub fn request_gl<RequestGL>(
+        &mut self,
+        request_gl: RequestGL
+    ) where RequestGL: FnOnce(&mut opengl_graphics::GlGraphics, &mut glutin_window::GlutinWindow) {
+        request_gl(&mut self.gl, &mut self.gl_window);
+    }
+
 }

@@ -1,7 +1,9 @@
 mod hydro;
 
-use hydro::{Window};
+use hydro::Game;
 
 fn main() {
-    let window = Window::new("Rust Sokoban", 800, 600);
+    let mut game = Game::new("Rust Sokoban", 800, 600);
+
+    game.run();
 }
