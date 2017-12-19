@@ -1,41 +1,41 @@
 extern crate piston;
+extern crate glutin_window;
+extern crate opengl_graphics;
+
 
 use self::piston::input::{PressEvent, RenderEvent, UpdateArgs, UpdateEvent};
+use self::opengl_graphics::OpenGL::V2_1 as OPEN_GL_V2;
 
-use hydro::Window;
+pub struct Context {
+    gl: opengl_graphics::GlGraphics
+}
 
 pub struct Game {
-    window: Window
+    context: Context,
+    events: piston::event_loop::Events,
+    gl_window: glutin_window::GlutinWindow
 }
 
 impl Game {
 
     pub fn new(title: &str, width: u32, height: u32) -> Game {
-        let window = Window::new(title, width, height);
+        let events = piston::event_loop::Events::new(piston::event_loop::EventSettings::new());
+        let window_settings = piston::window::WindowSettings::new(title, [width, height]);
+        let gl_window = window_settings.opengl(OPEN_GL_V2).exit_on_esc(true).build().unwrap();
+        let gl = opengl_graphics::GlGraphics::new(OPEN_GL_V2);
+        let context = Context {gl};
 
-        Game {window}
+        Game {events, context, gl_window}
     }
 
     pub fn run(&mut self) {
-        let settings = piston::event_loop::EventSettings::new();
-        let mut events = piston::event_loop::Events::new(settings);
-
-        self.window.request_gl(|gl, gl_window| {
-            while let Some(event) = events.next(gl_window) {
-                if let Some(render_args) = event.render_args() {
-
-                }
-
-                if let Some(UpdateArgs {dt, ..}) = event.update_args() {
-
-                }
-
-                if let Some(button) = event.press_args() {
-
-                }
+        while let Some(event) = self.events.next(&mut self.gl_window) {
+            if let Some(UpdateArgs {dt, ..}) = event.update_args() {
             }
-        });
 
+            if let Some(render_args) = event.render_args() {
+            }
+        }
     }
 
 }
