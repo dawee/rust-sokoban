@@ -2,17 +2,12 @@ extern crate piston;
 extern crate glutin_window;
 extern crate opengl_graphics;
 
-
 use self::piston::input::{PressEvent, RenderEvent, UpdateArgs, UpdateEvent};
 use self::opengl_graphics::OpenGL::V2_1 as OPEN_GL_V2;
 
-pub struct Context {
-    gl: opengl_graphics::GlGraphics
-}
-
 pub struct Game {
-    context: Context,
     events: piston::event_loop::Events,
+    gl: opengl_graphics::GlGraphics,
     gl_window: glutin_window::GlutinWindow
 }
 
@@ -23,9 +18,8 @@ impl Game {
         let window_settings = piston::window::WindowSettings::new(title, [width, height]);
         let gl_window = window_settings.opengl(OPEN_GL_V2).exit_on_esc(true).build().unwrap();
         let gl = opengl_graphics::GlGraphics::new(OPEN_GL_V2);
-        let context = Context {gl};
 
-        Game {events, context, gl_window}
+        Game {events, gl, gl_window}
     }
 
     pub fn run(&mut self) {
