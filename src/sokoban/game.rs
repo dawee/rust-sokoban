@@ -45,10 +45,10 @@ impl Game {
 
     pub fn on_press_key(&mut self, key: Key) {
         match key {
-            Key::Up => self.character.move_up(),
-            Key::Right => self.character.move_right(),
-            Key::Down => self.character.move_down(),
-            Key::Left => self.character.move_left(),
+            Key::Up => self.character.move_up(&self.level),
+            Key::Right => self.character.move_right(&self.level),
+            Key::Down => self.character.move_down(&self.level),
+            Key::Left => self.character.move_left(&self.level),
             _ => println!("press key")
         };
     }

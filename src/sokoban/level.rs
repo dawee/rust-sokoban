@@ -44,4 +44,11 @@ impl Level {
         self.each(&Cell::Wall, predicate);
     }
 
+    pub fn is_wall(&self, row: u32, col: u32) -> bool {
+        match self.cells[row as usize][col as usize] {
+            Cell::Wall => true,
+            _ => false
+        }
+    }
+
 }

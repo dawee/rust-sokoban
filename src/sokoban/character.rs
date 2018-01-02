@@ -6,6 +6,7 @@ use opengl_graphics::GlGraphics;
 use graphics::Transformed;
 use graphics::math::{Matrix2d, identity, transform_pos};
 use hydro::{GameObject, Provider, Sprite};
+use sokoban::Level;
 
 enum Posture {Up, Right, Down, Left}
 
@@ -15,7 +16,8 @@ pub struct Character {
     stand_down_sprite: Sprite,
     stand_left_sprite: Sprite,
     posture: Posture,
-    transform: Matrix2d
+    row: i32,
+    col: i32
 }
 
 impl Character {
@@ -34,7 +36,8 @@ impl Character {
 
         Character {
             posture: Posture::Right,
-            transform: identity().trans(x, y),
+            row: 0,
+            col: 0,
             stand_up_sprite: Sprite::new(identity(), "Character7"),
             stand_right_sprite: Sprite::new(identity(), "Character2"),
             stand_down_sprite: Sprite::new(identity(), "Character4"),
@@ -42,36 +45,34 @@ impl Character {
         }
     }
 
-    pub fn move_up(&mut self) {
-        let moved = self.transform.trans(0.0, -50.0);
-        let pos = transform_pos(moved.clone(), [0.0, 0.0]);
-
-        self.posture = Posture::Up;
-        self.transform = if pos[1] >= 0.0 { moved } else { self.transform };
+    fn is_reachable(&self, row: i32, col: i32, level: &Level) -> bool {
+        return row >= 0 && row < 12
+            && col >= 0 && col < 16
+            && !level.is_wall(row as u32, col as u32);
     }
 
-    pub fn move_right(&mut self) {
-        let moved = self.transform.trans(50.0, 0.0);
-        let pos = transform_pos(moved.clone(), [0.0, 0.0]);
+    pub fn move_up(&mut self, level: &Level) {
+        let new_row = self.row - 1;
 
-        self.posture = Posture::Right;
-        self.transform = if pos[0] < 800.0 { moved } else { self.transform };
+        self.row = if self.is_reachable(new_row, self.col, level) {new_row} else {self.row};
     }
 
-    pub fn move_down(&mut self) {
-        let moved = self.transform.trans(0.0, 50.0);
-        let pos = transform_pos(moved.clone(), [0.0, 0.0]);
+    pub fn move_right(&mut self, level: &Level) {
+        let new_col = self.col + 1;
 
-        self.posture = Posture::Down;
-        self.transform = if pos[1] < 600.0 { moved } else { self.transform };
+        self.col = if self.is_reachable(self.row, new_col, level) {new_col} else {self.col};
     }
 
-    pub fn move_left(&mut self) {
-        let moved = self.transform.trans(-50.0, 0.0);
-        let pos = transform_pos(moved.clone(), [0.0, 0.0]);
+    pub fn move_down(&mut self, level: &Level) {
+        let new_row = self.row + 1;
 
-        self.posture = Posture::Left;
-        self.transform = if pos[0] >= 0.0 { moved } else { self.transform };
+        self.row = if self.is_reachable(new_row, self.col, level) {new_row} else {self.row};
+    }
+
+    pub fn move_left(&mut self, level: &Level) {
+        let new_col = self.col - 1;
+
+        self.col = if self.is_reachable(self.row, new_col, level) {new_col} else {self.col};
     }
 
 }
@@ -86,7 +87,10 @@ impl GameObject for Character {
     }
 
     fn render(&self, provider: &Provider, parent_transform: &Matrix2d, gl: &mut GlGraphics) {
-        let transform = self.transform.prepend_transform(*parent_transform);
+        let transform = parent_transform.trans(
+            self.col as f64 * 50.0,
+            self.row as f64 * 50.0
+        );
 
         self.use_sprite(|sprite| sprite.render(provider, &transform, gl));
     }
