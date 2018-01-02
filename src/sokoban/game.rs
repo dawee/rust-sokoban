@@ -8,10 +8,11 @@ use graphics::Transformed;
 use graphics::math::{Matrix2d, identity};
 use opengl_graphics::GlGraphics;
 use hydro::{GameObject, Provider, Sprite};
-use sokoban::{Character};
+use sokoban::{Character, Level};
 
 pub struct Game {
     character: Character,
+    level: Level,
     tiles: Vec<Sprite>
 }
 
@@ -20,6 +21,7 @@ impl Game {
     pub fn new() -> Game {
         let character = Character::new((50.0, 50.0));
         let (rows, cols) = (12, 16);
+        let level = Level::new();
         let mut tiles: Vec<Sprite> = (0..(rows * cols)).map(|n| {
             let row = (n as f64 / cols as f64).floor();
             let col = n as f64 - row * cols as f64;
@@ -27,16 +29,11 @@ impl Game {
             Sprite::new(identity().trans(col * 50.0, row * 50.0), "GroundGravel_Concrete")
         }).collect();
 
-        tiles.push(Sprite::new(identity().trans(0.0, 0.0), "Wall_Black"));
-        tiles.push(Sprite::new(identity().trans(50.0, 0.0), "Wall_Black"));
-        tiles.push(Sprite::new(identity().trans(100.0, 0.0), "Wall_Black"));
-        tiles.push(Sprite::new(identity().trans(150.0, 0.0), "Wall_Black"));
-        tiles.push(Sprite::new(identity().trans(0.0, 50.0), "Wall_Black"));
-        tiles.push(Sprite::new(identity().trans(0.0, 100.0), "Wall_Black"));
-        tiles.push(Sprite::new(identity().trans(50.0, 100.0), "Wall_Black"));
-        tiles.push(Sprite::new(identity().trans(100.0, 100.0), "Wall_Black"));
+        level.each_wall(|row, col| {
+            tiles.push(Sprite::new(identity().trans(col as f64 * 50.0, row as f64 * 50.0), "Wall_Black"));
+        });
 
-        Game {character, tiles}
+        Game {character, level, tiles}
     }
 
     pub fn on_press_button(&mut self, button: Button) {
