@@ -7,13 +7,13 @@ pub enum Cell {
 }
 
 pub struct Level {
-    cells: [[Cell; 12]; 16]
+    cells: [[Cell; 16]; 12]
 }
 
 impl Level {
 
     pub fn new() -> Level {
-        let mut cells = [[Cell::Empty; 12]; 16];
+        let mut cells = [[Cell::Empty; 16]; 12];
 
         cells[3][5] = Cell::Wall;
         cells[4][5] = Cell::Wall;

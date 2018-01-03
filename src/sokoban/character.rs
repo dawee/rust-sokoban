@@ -55,24 +55,28 @@ impl Character {
         let new_row = self.row - 1;
 
         self.row = if self.is_reachable(new_row, self.col, level) {new_row} else {self.row};
+        self.posture = Posture::Up;
     }
 
     pub fn move_right(&mut self, level: &Level) {
         let new_col = self.col + 1;
 
         self.col = if self.is_reachable(self.row, new_col, level) {new_col} else {self.col};
+        self.posture = Posture::Right;
     }
 
     pub fn move_down(&mut self, level: &Level) {
         let new_row = self.row + 1;
 
         self.row = if self.is_reachable(new_row, self.col, level) {new_row} else {self.row};
+        self.posture = Posture::Down;
     }
 
     pub fn move_left(&mut self, level: &Level) {
         let new_col = self.col - 1;
 
         self.col = if self.is_reachable(self.row, new_col, level) {new_col} else {self.col};
+        self.posture = Posture::Left;
     }
 
 }
