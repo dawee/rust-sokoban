@@ -31,13 +31,11 @@ impl Character {
         };
     }
 
-    pub fn new(position: (f64, f64)) -> Character {
-        let (x, y) = position;
-
+    pub fn new(row: i32, col: i32) -> Character {
         Character {
+            row,
+            col,
             posture: Posture::Right,
-            row: 0,
-            col: 0,
             stand_up_sprite: Sprite::new(identity(), "Character7"),
             stand_right_sprite: Sprite::new(identity(), "Character2"),
             stand_down_sprite: Sprite::new(identity(), "Character4"),

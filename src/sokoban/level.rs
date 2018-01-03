@@ -13,11 +13,13 @@ pub struct Level {
 impl Level {
 
     pub fn new() -> Level {
-        let mut cells = [[Cell::Empty; 16]; 12];
+        let mut cells = [[Cell::Wall; 16]; 12];
 
-        cells[3][5] = Cell::Wall;
-        cells[4][5] = Cell::Wall;
-        cells[5][5] = Cell::Wall;
+        (4..8).for_each(|row| {
+            (2..10).for_each(|col| {
+                cells[row as usize][col as usize] = Cell::Empty;
+            });
+        });
 
         Level {cells}
     }

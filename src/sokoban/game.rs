@@ -19,7 +19,7 @@ pub struct Game {
 impl Game {
 
     pub fn new() -> Game {
-        let character = Character::new((50.0, 50.0));
+        let character = Character::new(6, 8);
         let (rows, cols) = (12, 16);
         let level = Level::new();
         let mut tiles: Vec<Sprite> = (0..(rows * cols)).map(|n| {
