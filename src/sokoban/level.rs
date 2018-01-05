@@ -10,18 +10,54 @@ pub struct Level {
     cells: [[Cell; 16]; 12]
 }
 
+fn set_next_cell(cells: &mut [[Cell; 16]; 12], row: &mut u32, col: &mut u32, cell: &Cell) {
+    cells[*row as usize][*col as usize] = *cell;
+    *col += 1;
+
+    if (*col == 16) {
+        *col = 0;
+        *row += 1;
+    }
+}
+
+macro_rules! set_next_cell {
+    (X, $cells:expr, $row:expr, $col:expr) => (set_next_cell(&mut $cells, &mut $row, &mut $col, &Cell::Wall));
+    (o, $cells:expr, $row:expr, $col:expr) => (set_next_cell(&mut $cells, &mut $row, &mut $col, &Cell::Empty));
+}
+
+macro_rules! level {
+    ( $( $cell:ident )* ) => {
+        {
+            let mut cells = [[Cell::Wall; 16]; 12];
+            let mut row: u32 = 0;
+            let mut col: u32 = 0;
+
+            $(
+                set_next_cell!($cell, cells, row, col);
+            )*
+
+            Level {cells}
+        }
+    };
+}
+
 impl Level {
 
     pub fn new() -> Level {
-        let mut cells = [[Cell::Wall; 16]; 12];
-
-        (4..8).for_each(|row| {
-            (2..10).for_each(|col| {
-                cells[row as usize][col as usize] = Cell::Empty;
-            });
-        });
-
-        Level {cells}
+        level! {
+            o o o o o o o o o o o o o o o o
+            o o o o o o o o o o o o o o o o
+            o o o o o o X X X o o o o o o o
+            o o o o o o X o X o o o o o o o
+            o o o o o o X o X X X X o o o o
+            o o o o X X X o o o o X o o o o
+            o o o o X o o o o X X X o o o o
+            o o o o X X X X o X o o o o o o
+            o o o o o o o X o X o o o o o o
+            o o o o o o o X X X o o o o o o
+            o o o o o o o o o o o o o o o o
+            o o o o o o o o o o o o o o o o
+        }
     }
 
     pub fn each<Predicate>(&self, cell_type: &Cell, mut predicate: Predicate) where Predicate: FnMut(u32, u32) {
