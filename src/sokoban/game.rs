@@ -55,28 +55,28 @@ impl Game {
                     block.move_up(&self.character, &self.level);
                 }
 
-                self.character.move_up(&self.level);
+                self.character.move_up(&self.blocks, &self.level);
             }
             Key::Right => {
                 for block in self.blocks.iter_mut() {
                     block.move_right(&self.character, &self.level);
                 }
 
-                self.character.move_right(&self.level);
+                self.character.move_right(&self.blocks, &self.level);
             }
             Key::Down => {
                 for block in self.blocks.iter_mut() {
                     block.move_down(&self.character, &self.level);
                 }
 
-                self.character.move_down(&self.level);
+                self.character.move_down(&self.blocks, &self.level);
             }
             Key::Left => {
                 for block in self.blocks.iter_mut() {
                     block.move_left(&self.character, &self.level);
                 }
 
-                self.character.move_left(&self.level);
+                self.character.move_left(&self.blocks, &self.level);
             },
             _ => ()
         };

@@ -28,6 +28,10 @@ impl Block {
             && !level.is_wall(row as u32, col as u32);
     }
 
+    pub fn is_at(&self, row: i32, col: i32) -> bool {
+        self.row == row && self.col == col
+    }
+
     pub fn move_left(&mut self, character: &Character, level: &Level) {
         let new_col = self.col - 1;
         let should_move = {

@@ -6,7 +6,7 @@ use opengl_graphics::GlGraphics;
 use graphics::Transformed;
 use graphics::math::{Matrix2d, identity, transform_pos};
 use hydro::{GameObject, Provider, Sprite};
-use sokoban::Level;
+use sokoban::{Block, Level};
 
 enum Posture {Up, Right, Down, Left}
 
@@ -47,37 +47,40 @@ impl Character {
         self.row == row && self.col == col
     }
 
-    fn is_reachable(&self, row: i32, col: i32, level: &Level) -> bool {
-        return row >= 0 && row < 12
+    fn is_reachable(&self, row: i32, col: i32, blocks: &Vec<Block>, level: &Level) -> bool {
+        let contains_blocks = blocks.iter().any(|block| block.is_at(row, col));
+
+        return !contains_blocks
+            && row >= 0 && row < 12
             && col >= 0 && col < 16
             && !level.is_wall(row as u32, col as u32);
     }
 
-    pub fn move_up(&mut self, level: &Level) {
+    pub fn move_up(&mut self, blocks: &Vec<Block>, level: &Level) {
         let new_row = self.row - 1;
 
-        self.row = if self.is_reachable(new_row, self.col, level) {new_row} else {self.row};
+        self.row = if self.is_reachable(new_row, self.col, blocks, level) {new_row} else {self.row};
         self.posture = Posture::Up;
     }
 
-    pub fn move_right(&mut self, level: &Level) {
+    pub fn move_right(&mut self, blocks: &Vec<Block>, level: &Level) {
         let new_col = self.col + 1;
 
-        self.col = if self.is_reachable(self.row, new_col, level) {new_col} else {self.col};
+        self.col = if self.is_reachable(self.row, new_col, blocks, level) {new_col} else {self.col};
         self.posture = Posture::Right;
     }
 
-    pub fn move_down(&mut self, level: &Level) {
+    pub fn move_down(&mut self, blocks: &Vec<Block>, level: &Level) {
         let new_row = self.row + 1;
 
-        self.row = if self.is_reachable(new_row, self.col, level) {new_row} else {self.row};
+        self.row = if self.is_reachable(new_row, self.col, blocks, level) {new_row} else {self.row};
         self.posture = Posture::Down;
     }
 
-    pub fn move_left(&mut self, level: &Level) {
+    pub fn move_left(&mut self, blocks: &Vec<Block>, level: &Level) {
         let new_col = self.col - 1;
 
-        self.col = if self.is_reachable(self.row, new_col, level) {new_col} else {self.col};
+        self.col = if self.is_reachable(self.row, new_col, blocks, level) {new_col} else {self.col};
         self.posture = Posture::Left;
     }
 
