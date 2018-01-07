@@ -1,6 +1,6 @@
 #[derive(Copy, Clone, PartialEq)]
 pub enum Cell {
-    Empty,
+    Ground,
     Block,
     Wall,
     Diamond
@@ -22,7 +22,7 @@ fn set_next_cell(cells: &mut [[Cell; 16]; 12], row: &mut u32, col: &mut u32, cel
 
 macro_rules! set_next_cell {
     (X, $cells:expr, $row:expr, $col:expr) => (set_next_cell(&mut $cells, &mut $row, &mut $col, &Cell::Wall));
-    (o, $cells:expr, $row:expr, $col:expr) => (set_next_cell(&mut $cells, &mut $row, &mut $col, &Cell::Empty));
+    (o, $cells:expr, $row:expr, $col:expr) => (set_next_cell(&mut $cells, &mut $row, &mut $col, &Cell::Ground));
 }
 
 macro_rules! level {
@@ -80,6 +80,10 @@ impl Level {
 
     pub fn each_wall<Predicate>(&self, mut predicate: Predicate) where Predicate: FnMut(u32, u32) {
         self.each(&Cell::Wall, predicate);
+    }
+
+    pub fn each_ground<Predicate>(&self, mut predicate: Predicate) where Predicate: FnMut(u32, u32) {
+        self.each(&Cell::Ground, predicate);
     }
 
     pub fn is_wall(&self, row: u32, col: u32) -> bool {

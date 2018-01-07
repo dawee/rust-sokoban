@@ -22,12 +22,11 @@ impl Game {
         let character = Character::new(6, 8);
         let (rows, cols) = (12, 16);
         let level = Level::new();
-        let mut tiles: Vec<Sprite> = (0..(rows * cols)).map(|n| {
-            let row = (n as f64 / cols as f64).floor();
-            let col = n as f64 - row * cols as f64;
+        let mut tiles = Vec::new();
 
-            Sprite::new(identity().trans(col * 50.0, row * 50.0), "GroundGravel_Concrete")
-        }).collect();
+        level.each_ground(|row, col| {
+            tiles.push(Sprite::new(identity().trans(col as f64 * 50.0, row as f64 * 50.0), "GroundGravel_Concrete"));
+        });
 
         level.each_wall(|row, col| {
             tiles.push(Sprite::new(identity().trans(col as f64 * 50.0, row as f64 * 50.0), "Wall_Black"));
