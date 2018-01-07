@@ -32,6 +32,10 @@ impl Game {
             tiles.push(Sprite::new(identity().trans(col as f64 * 50.0, row as f64 * 50.0), "Wall_Black"));
         });
 
+        level.each_block(|row, col| {
+            tiles.push(Sprite::new(identity().trans(col as f64 * 50.0, row as f64 * 50.0), "Crate_Blue"));
+        });
+
         Game {character, level, tiles}
     }
 
