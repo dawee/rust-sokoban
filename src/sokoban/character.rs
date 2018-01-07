@@ -53,7 +53,7 @@ impl Character {
         return !contains_blocks
             && row >= 0 && row < 12
             && col >= 0 && col < 16
-            && !level.is_wall(row as u32, col as u32);
+            && !level.contains_wall(row, col);
     }
 
     pub fn move_up(&mut self, blocks: &Vec<Block>, level: &Level) {

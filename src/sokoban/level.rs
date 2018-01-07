@@ -105,11 +105,12 @@ impl Level {
         });
     }
 
-    pub fn is_wall(&self, row: u32, col: u32) -> bool {
-        match self.cells[row as usize][col as usize] {
-            Cell::Wall => true,
-            _ => false
-        }
+    pub fn contains_wall(&self, row: i32, col: i32) -> bool {
+        self.cells[row as usize][col as usize] == Cell::Wall
+    }
+
+    pub fn contains_diamond(&self, row: i32, col: i32) -> bool {
+        self.cells[row as usize][col as usize] == Cell::Diamond
     }
 
 }

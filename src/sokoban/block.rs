@@ -11,21 +11,25 @@ use sokoban::{Character, Level};
 pub struct Block {
     row: i32,
     col: i32,
-    sprite: Sprite
+    sprite: Sprite,
+    on_diamond_sprite: Sprite,
+    on_diamond: bool
 }
 
 impl Block {
 
     pub fn new(row: i32, col: i32) -> Block {
         let sprite = Sprite::new(identity(), "Crate_Blue");
+        let on_diamond_sprite = Sprite::new(identity(), "Crate_Purple");
+        let on_diamond = false;
 
-        Block {row, col, sprite}
+        Block {row, col, on_diamond, on_diamond_sprite, sprite}
     }
 
     fn is_reachable(&self, row: i32, col: i32, level: &Level) -> bool {
         return row >= 0 && row < 12
             && col >= 0 && col < 16
-            && !level.is_wall(row as u32, col as u32);
+            && !level.contains_wall(row, col);
     }
 
     pub fn is_at(&self, row: i32, col: i32) -> bool {
@@ -41,6 +45,7 @@ impl Block {
         };
 
         self.col = if should_move {new_col} else {self.col};
+        self.on_diamond = level.contains_diamond(self.row, self.col);
     }
 
     pub fn move_right(&mut self, character: &Character, level: &Level) {
@@ -52,6 +57,7 @@ impl Block {
         };
 
         self.col = if should_move {new_col} else {self.col};
+        self.on_diamond = level.contains_diamond(self.row, self.col);
     }
 
     pub fn move_up(&mut self, character: &Character, level: &Level) {
@@ -63,6 +69,7 @@ impl Block {
         };
 
         self.row = if should_move {new_row} else {self.row};
+        self.on_diamond = level.contains_diamond(self.row, self.col);
     }
 
     pub fn move_down(&mut self, character: &Character, level: &Level) {
@@ -74,6 +81,7 @@ impl Block {
         };
 
         self.row = if should_move {new_row} else {self.row};
+        self.on_diamond = level.contains_diamond(self.row, self.col);
     }
 
 }
@@ -81,13 +89,18 @@ impl Block {
 impl GameObject for Block {
 
     fn load(&self, provider: &mut Provider) {
+        self.on_diamond_sprite.load(provider);
         self.sprite.load(provider);
     }
 
     fn render(&self, provider: &Provider, parent_transform: &Matrix2d, gl: &mut GlGraphics) {
         let transform = parent_transform.trans(self.col as f64 * 50.0, self.row as f64 * 50.0);
 
-        self.sprite.render(provider, &transform, gl);
+        if self.on_diamond {
+            self.on_diamond_sprite.render(provider, &transform, gl);
+        } else {
+            self.sprite.render(provider, &transform, gl);
+        }
     }
 
 }
