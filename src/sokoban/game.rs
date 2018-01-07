@@ -34,6 +34,10 @@ impl Game {
             tiles.push(Sprite::new(identity().trans(col as f64 * 50.0, row as f64 * 50.0), "Wall_Black"));
         });
 
+        level.each_diamond(|row, col| {
+            tiles.push(Sprite::new(identity().trans(col as f64 * 50.0, row as f64 * 50.0), "EndPoint_Purple"));
+        });
+
         level.each_block(|row, col| {
             blocks.push(Block::new(row as i32, col as i32));
         });
@@ -77,7 +81,7 @@ impl Game {
                 }
 
                 self.character.move_left(&self.blocks, &self.level);
-            },
+            }
             _ => ()
         };
     }

@@ -26,6 +26,7 @@ macro_rules! set_next_cell {
     (o, $cells:expr, $row:expr, $col:expr) => (set_next_cell(&mut $cells, &mut $row, &mut $col, &Cell::Ground));
     (H, $cells:expr, $row:expr, $col:expr) => (set_next_cell(&mut $cells, &mut $row, &mut $col, &Cell::Character));
     (B, $cells:expr, $row:expr, $col:expr) => (set_next_cell(&mut $cells, &mut $row, &mut $col, &Cell::Block));
+    (q, $cells:expr, $row:expr, $col:expr) => (set_next_cell(&mut $cells, &mut $row, &mut $col, &Cell::Diamond));
 }
 
 macro_rules! level {
@@ -51,12 +52,12 @@ impl Level {
             o o o o o o o o o o o o o o o o
             o o o o o o o o o o o o o o o o
             o o o o o o X X X o o o o o o o
-            o o o o o o X o X o o o o o o o
+            o o o o o o X q X o o o o o o o
             o o o o o o X o X X X X o o o o
-            o o o o X X X B o B o X o o o o
-            o o o o X o o B H X X X o o o o
+            o o o o X X X B o B q X o o o o
+            o o o o X q o B H X X X o o o o
             o o o o X X X X B X o o o o o o
-            o o o o o o o X o X o o o o o o
+            o o o o o o o X q X o o o o o o
             o o o o o o o X X X o o o o o o
             o o o o o o o o o o o o o o o o
             o o o o o o o o o o o o o o o o
@@ -92,6 +93,10 @@ impl Level {
 
     pub fn each_block<Predicate>(&self, mut predicate: Predicate) where Predicate: FnMut(u32, u32) {
         self.each_type(&Cell::Block, predicate);
+    }
+
+    pub fn each_diamond<Predicate>(&self, mut predicate: Predicate) where Predicate: FnMut(u32, u32) {
+        self.each_type(&Cell::Diamond, predicate);
     }
 
     pub fn each_ground<Predicate>(&self, mut predicate: Predicate) where Predicate: FnMut(u32, u32) {
