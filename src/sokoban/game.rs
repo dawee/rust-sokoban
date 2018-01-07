@@ -50,10 +50,34 @@ impl Game {
 
     pub fn on_press_key(&mut self, key: Key) {
         match key {
-            Key::Up => self.character.move_up(&self.level),
-            Key::Right => self.character.move_right(&self.level),
-            Key::Down => self.character.move_down(&self.level),
-            Key::Left => self.character.move_left(&self.level),
+            Key::Up => {
+                for block in self.blocks.iter_mut() {
+                    block.move_up(&self.character, &self.level);
+                }
+
+                self.character.move_up(&self.level);
+            }
+            Key::Right => {
+                for block in self.blocks.iter_mut() {
+                    block.move_right(&self.character, &self.level);
+                }
+
+                self.character.move_right(&self.level);
+            }
+            Key::Down => {
+                for block in self.blocks.iter_mut() {
+                    block.move_down(&self.character, &self.level);
+                }
+
+                self.character.move_down(&self.level);
+            }
+            Key::Left => {
+                for block in self.blocks.iter_mut() {
+                    block.move_left(&self.character, &self.level);
+                }
+
+                self.character.move_left(&self.level);
+            },
             _ => ()
         };
     }

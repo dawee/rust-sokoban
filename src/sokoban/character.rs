@@ -43,6 +43,10 @@ impl Character {
         }
     }
 
+    pub fn is_at(&self, row: i32, col: i32) -> bool {
+        self.row == row && self.col == col
+    }
+
     fn is_reachable(&self, row: i32, col: i32, level: &Level) -> bool {
         return row >= 0 && row < 12
             && col >= 0 && col < 16
