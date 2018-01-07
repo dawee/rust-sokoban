@@ -8,9 +8,10 @@ use graphics::Transformed;
 use graphics::math::{Matrix2d, identity};
 use opengl_graphics::GlGraphics;
 use hydro::{GameObject, Provider, Sprite};
-use sokoban::{Character, Level};
+use sokoban::{Block, Character, Level};
 
 pub struct Game {
+    blocks: Vec<Block>,
     character: Character,
     level: Level,
     tiles: Vec<Sprite>
@@ -22,6 +23,7 @@ impl Game {
         let character = Character::new(6, 8);
         let (rows, cols) = (12, 16);
         let level = Level::new();
+        let mut blocks = Vec::new();
         let mut tiles = Vec::new();
 
         level.each_ground(|row, col| {
@@ -33,16 +35,16 @@ impl Game {
         });
 
         level.each_block(|row, col| {
-            tiles.push(Sprite::new(identity().trans(col as f64 * 50.0, row as f64 * 50.0), "Crate_Blue"));
+            blocks.push(Block::new(row as i32, col as i32));
         });
 
-        Game {character, level, tiles}
+        Game {blocks, character, level, tiles}
     }
 
     pub fn on_press_button(&mut self, button: Button) {
         match button {
             Button::Keyboard(key) => self.on_press_key(key),
-            _ => println!("unmanaged event")
+            _ => ()
         };
     }
 
@@ -52,7 +54,7 @@ impl Game {
             Key::Right => self.character.move_right(&self.level),
             Key::Down => self.character.move_down(&self.level),
             Key::Left => self.character.move_left(&self.level),
-            _ => println!("press key")
+            _ => ()
         };
     }
 
@@ -63,11 +65,13 @@ impl GameObject for Game {
     fn load(&self, provider: &mut Provider) {
         self.character.load(provider);
         self.tiles.iter().for_each(|ground| ground.load(provider));
+        self.blocks.iter().for_each(|block| block.load(provider));
     }
 
     fn render(&self, provider: &Provider, parent_transform: &Matrix2d, gl: &mut GlGraphics) {
       clear([0.0, 0.0, 0.0, 1.0], gl);
-      self.tiles.iter().for_each(|ground| ground.render(provider, parent_transform, gl));
+      self.tiles.iter().for_each(|tile| tile.render(provider, parent_transform, gl));
+      self.blocks.iter().for_each(|block| block.render(provider, parent_transform, gl));
       self.character.render(provider, parent_transform, gl);
     }
 

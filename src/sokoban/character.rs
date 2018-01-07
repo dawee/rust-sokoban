@@ -89,10 +89,7 @@ impl GameObject for Character {
     }
 
     fn render(&self, provider: &Provider, parent_transform: &Matrix2d, gl: &mut GlGraphics) {
-        let transform = parent_transform.trans(
-            self.col as f64 * 50.0,
-            self.row as f64 * 50.0
-        );
+        let transform = parent_transform.trans(self.col as f64 * 50.0, self.row as f64 * 50.0);
 
         self.use_sprite(|sprite| sprite.render(provider, &transform, gl));
     }
